@@ -5,12 +5,6 @@ import { ContactItem } from './ContactItem';
 const ContactList = () => {
   const contacts = useSelector(getFilteredContacts);
 
-  // const filteredContacts = () => {
-  //   return contacts.filter(contact =>
-  //     contact.name.toLowerCase().includes(filter.toLowerCase())
-  //   );
-  // };
-
   return (
     <>
       <ul>

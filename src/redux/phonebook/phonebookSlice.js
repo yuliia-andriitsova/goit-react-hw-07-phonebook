@@ -1,26 +1,57 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { addContact, fetchContacts, deleteContact } from './operations';
 
-const initialState = {
-  contacts: [],
+const handlePending = state => {
+  state.isLoading = true;
+};
+const handleRejected = (state, action) => {
+  state.isLoading = false;
+  state.error = action.payload;
 };
 
 export const phonebookSlice = createSlice({
-  name: 'phonebook',
-  initialState,
-  reducers: {
-    addContactAction: (state, action) => {
-      state.contacts = [...state.contacts, action.payload];
+  name: 'contacts',
+
+  initialState: {
+    items: [],
+    isLoading: false,
+    error: null,
+  },
+
+  extraReducers: {
+    //------pending--------------
+    [fetchContacts.pending]: handlePending,
+    [addContact.pending]: handlePending,
+    [deleteContact.pending]: handlePending,
+
+    //------fulfilled----------------
+
+    [fetchContacts.fulfilled](state, action) {
+      state.isLoading = false;
+      state.error = null;
+      state.items = [...action.payload];
     },
 
-    onDeleteContactAction: (state, action) => {
-      state.contacts = state.contacts.filter(
-        contact => contact.id !== action.payload
+    [addContact.fulfilled](state, action) {
+      state.isLoading = false;
+      state.error = null;
+      state.items = [...state.items, action.payload];
+    },
+    [deleteContact.fulfilled](state, action) {
+      state.isLoading = false;
+      state.error = null;
+      state.items = state.items.filter(
+        contact => contact.id !== action.payload.id
       );
     },
+    //------rejected------------------------
+    [fetchContacts.rejected]: handleRejected,
+
+    [addContact.rejected]: handleRejected,
+
+    [deleteContact.rejected]: handleRejected,
   },
 });
 
-export const { addContactAction, onDeleteContactAction } =
-  phonebookSlice.actions;
-
-export default phonebookSlice.reducer;
+const phonebookReducer = phonebookSlice.reducer;
+export default phonebookReducer;

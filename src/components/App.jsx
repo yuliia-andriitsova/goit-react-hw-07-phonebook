@@ -1,8 +1,21 @@
 import { PhoneBook } from './PhoneBook';
 import { Filter } from './Filter';
 import { ContactList } from './ContactList';
+import { fetchContacts } from 'redux/phonebook/operations';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { getIsLoading } from 'redux/phonebook/selectors';
+import { getError } from 'redux/phonebook/selectors';
 
 const App = () => {
+  const dispatch = useDispatch();
+  const isLoading = useSelector(getIsLoading);
+  const error = useSelector(getError);
+
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
+
   return (
     <div
       style={{
@@ -20,6 +33,7 @@ const App = () => {
     >
       <PhoneBook />
       <h2> Contacts</h2>
+      {isLoading && !error && <p> Request in progress...</p>}
       <Filter />
       <ContactList />
     </div>

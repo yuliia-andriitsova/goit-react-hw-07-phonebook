@@ -1,19 +1,20 @@
 import { useState } from 'react';
-import { addContactAction } from 'redux/phonebook/phonebookSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { nanoid } from '@reduxjs/toolkit';
+import { addContact } from 'redux/phonebook/operations';
+import { getContacts } from 'redux/phonebook/selectors';
 
 export function PhoneBook() {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
   const dispatch = useDispatch();
-  const contacts = useSelector(state => state.phonebook.contacts);
+  const contacts = useSelector(getContacts);
 
   const handleAddContact = (name, number) => {
     if (contacts.some(contact => contact.name === name)) {
       return alert(`${name} is already in contacts `);
     }
-    dispatch(addContactAction({ name, number, id: nanoid() }));
+
+    dispatch(addContact({ name, number }));
   };
 
   const onChangeName = event => {
