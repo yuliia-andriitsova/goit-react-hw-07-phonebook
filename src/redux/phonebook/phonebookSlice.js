@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { addContact, fetchContacts, deleteContact } from './operations';
 
-const handlePending = state => {
+export const handlePending = state => {
   state.isLoading = true;
 };
 const handleRejected = (state, action) => {
